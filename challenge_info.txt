@@ -1,0 +1,99 @@
+NeurIPS 2025 Weak Lensing Challenge
+=====================================
+
+INTRODUCTION
+------------
+This competition focuses on analyzing weak gravitational lensing data to infer cosmological parameters.
+Weak lensing refers to subtle distortions in galaxy shapes caused by light deflection through the universe's
+matter distribution, providing a powerful probe of dark matter and cosmological models.
+
+COMPETITION TASKS
+-----------------
+The competition is structured in two phases, focusing on two key cosmological parameters:
+- Ω_m: Fraction of matter energy density in the universe
+- S_8: Amplitude of matter fluctuations in the present-day universe
+
+Phase 1: Cosmological Parameter Estimation
+- Develop models to infer Ω_m and S_8 from weak lensing observations
+- Predict point estimates (Ω̂_m, Ŝ_8) and uncertainties (σ̂_Ω_m, σ̂_S_8)
+- Account for simulation-model mismatch and distribution shift
+- Handle systematic effects and observational uncertainties
+
+DATASET DESCRIPTION
+-------------------
+Data Source: Simulated datasets mimicking Hyper Suprime-Cam (HSC) survey observations
+Image Dimensions: 1424 × 176 pixels
+Resolution: 2 arcmin per pixel
+Field: Convergence map of redshift BIN 2 of WIDE12H subfield in HSC Y3
+
+Data Generation:
+- 101 different spatially-flat ΛCDM cosmological models
+- High-resolution cosmological ray-tracing simulations
+- Each model varies in Ω_m and S_8 parameters
+- Includes realistic systematic effects:
+  * Baryonic effects
+  * Photometric redshift uncertainty
+  
+Training Dataset: ~26,000 labeled samples
+Labels: (Ω_m, S_8) for each convergence map
+
+Systematic Parameters:
+- Nuisance parameters that need to be marginalized during inference
+- Fully sampled in training set for marginalization
+
+BASELINE METHODS
+----------------
+
+1. Power Spectrum Analysis
+   - Uses power spectrum P(k) as summary statistic
+   - Summary: d = log P(k)
+   - Traditional cosmological analysis approach
+   - Captures limited information compared to ML methods
+
+2. Convolutional Neural Network + MCMC
+   - CNN predicts point estimates: θ = (Ω̂_m, Ŝ_8)
+   - Summary: d = f_NN^ϕ with n_d = 2
+   - Trained with MSE loss
+   - Uses MCMC for uncertainty quantification
+
+3. Convolutional Neural Network Direct Prediction
+   - CNN directly predicts parameters and uncertainties
+   - Outputs: (Ω̂_m, Ŝ_8, σ̂_Ω_m, σ̂_S_8)
+   - Trained with KL divergence loss:
+     KL Loss = (1/N) Σ {(Ω̂_m,i - Ω_m,i^truth)²/σ̂²_Ω_m,i + 
+                        (Ŝ_8,i - S_8,i^truth)²/σ̂²_S_8,i + 
+                        log(σ̂²_Ω_m,i) + log(σ̂²_S_8,i)}
+   - No explicit MCMC sampling required
+   - Assumes joint Gaussian posterior distribution
+
+Performance:
+- Neural network methods capture more information than traditional power spectrum analysis
+- Lead to better cosmological parameter predictions
+- More effective at extracting non-Gaussian features from cosmic web
+
+KEY CHALLENGES
+--------------
+1. Simulation-model mismatch: Simulations may not accurately represent real observations
+2. Observational systematics: Need robust methods that handle systematic uncertainties
+3. Non-Gaussian features: Traditional two-point statistics are insufficient
+4. Uncertainty quantification: Must provide reliable confidence estimates
+5. Generalization: Methods should work across different cosmological models
+
+COMPETITION GOALS
+-----------------
+1. Quantify information content extractable by different analysis methods
+2. Compare classical statistics vs. ML-based approaches
+3. Evaluate robustness to simulation inaccuracies and systematics
+4. Guide development of next-generation weak lensing analysis pipelines
+5. Foster collaboration between astrophysics and machine learning communities
+6. Improve cosmological inference for surveys: LSST, Euclid, Roman Space Telescope
+
+FILES IN DATASET
+----------------
+- Training Data / Phase 1 Test Data: 6.7 GB download
+- Phase 2 Test Data: Available when Phase 2 starts
+- Expected files:
+  * Convergence maps (2D images)
+  * Labels (cosmological parameters)
+  * Masks (valid data regions)
+  * Test data (unlabeled for evaluation)
