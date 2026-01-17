@@ -177,12 +177,3 @@ Training should take 30-60 minutes on a modern GPU. If it's much slower:
 - `baseline_cnn_model.ipynb` - Interactive model notebook
 - `challenge_info.txt` - Challenge description
 
-## Next Steps for Improvement
-
-1. Data augmentation (rotations, flips)
-2. Deeper architecture (ResNet, EfficientNet)
-3. Ensemble multiple models
-4. Add attention mechanisms
-5. Incorporate power spectrum features
-6. Test-time augmentation
-7. Hyperparameter tuning
