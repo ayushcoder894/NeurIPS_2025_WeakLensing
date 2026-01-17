@@ -90,7 +90,30 @@ Linear(256→4)  # [Ω_m, S_8, log_var_Ω_m, log_var_S_8]
 - **Early Stopping**: Patience 7-12 epochs
 - **Data**: 25,856 samples (101 cosmologies × 256 each)
 
-## 📝 Generate Submission
+## � Results
+
+### Model Performance (A100 Optimized)
+
+| Metric | Ω_m | S_8 |
+|--------|-----|-----|
+| **Mean Prediction** | 0.2498 | 0.6572 |
+| **Std Deviation** | 0.0129 | 0.0394 |
+| **Avg Uncertainty (σ)** | 0.1829 | 0.2029 |
+
+### Test Set Predictions Summary
+- **Total samples**: 4,000
+- **Output format**: `[Ω_m, S_8, σ_Ω_m, σ_S_8]`
+
+### Training Configuration
+| Setting | Baseline (RTX 4060) | A100 Optimized |
+|---------|---------------------|----------------|
+| Batch Size | 32 | 128 |
+| Parameters | ~2.6M | ~11M |
+| Training Time | 30-60 min | 15-25 min |
+| Mixed Precision | No | Yes (FP16) |
+| Data Augmentation | No | Yes (flips) |
+
+## �📝 Generate Submission
 
 ```python
 import numpy as np, json, zipfile, os
